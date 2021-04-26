@@ -61,6 +61,39 @@ public class Deck : MonoBehaviour
          * El método Random.Range(0,n), devuelve un valor entre 0 y n-1
          * Si lo necesitas, puedes definir nuevos arrays.
          */       
+
+        int[] listaShuffle = new int[52];
+
+        int nAletorio;
+
+        int index = 0;
+
+        for (int i = 0; i < 51; i++){
+            
+            nAletorio = Random.Range(0, 51);
+
+            for (int j = 0; j < 51; j++){
+
+                if (nAletorio != listaShuffle[i]){
+
+                    listaShuffle[index] = nAletorio;
+
+                    index++;
+
+                }
+            }
+        }
+
+        Sprite[] fAux = faces;
+        int[] vAux = values;
+        for(int i = 0; i < 51; i++){
+
+            faces[i] = fAux[listaShuffle[i]];
+
+            values[i] = vAux[listaShuffle[i]];
+
+        }
+
     }
 
     void StartGame()
