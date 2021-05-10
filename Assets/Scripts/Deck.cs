@@ -116,11 +116,78 @@ public class Deck : MonoBehaviour
          * - Probabilidad de que el jugador obtenga entre un 17 y un 21 si pide una carta
          * - Probabilidad de que el jugador obtenga más de 21 si pide una carta          
          */
-        int casosTotales = 49;
+        float casosTotales = 49;
 
-        int cantidadASuperarDealer = values[0] + values[2] - values[1];
+        float cantidadSuperarDealer = player.GetComponent<CardHand>().points - values[1]; //Cada vez que cojo carta obtengo la nueva
 
+        float cantidadSuperarJugador = player.GetComponent<CardHand>().points;
 
+        float casoFavDealer = 0;
+
+        float casoFavJugador = 0;
+
+        float casoFavPerder = 0;
+
+        if (values[1] > cantidadSuperarDealer) {
+
+            casoFavDealer++;
+
+        }
+
+        if (values[1] + cantidadSuperarJugador <= 21 && values[1] + cantidadSuperarJugador >= 17) {
+
+            casoFavJugador++;
+
+        }
+
+        if (values[1] + cantidadSuperarJugador > 21) {
+
+            casoFavPerder++;
+
+        }
+
+        // i = 4 por que los 4 primeros ya lo hemos mirado.
+
+        //Calculamos las probabilidades del resto de las cartas.
+
+        for (int i = 4; i < values.Length; i++)
+        {
+
+            if (values[i] > cantidadSuperarDealer)
+            {
+
+                casoFavDealer++;
+
+            }
+
+            if (values[i] + cantidadSuperarJugador <= 21 && values[i] + cantidadSuperarJugador >= 17)
+            {
+
+                casoFavJugador++;
+
+            }
+
+            if (values[i] + cantidadSuperarJugador > 21)
+            {
+
+                casoFavPerder++;
+
+            }
+
+        }
+        probMessage.text = "El dealer tenga más puntuación que el jugador: " + (100 * (casoFavDealer / casosTotales)).ToString() + "\r\n" + "\r\n" + "El jugador obtenga entre un 17 y un 21 si pide una carta: " + (100 * (casoFavJugador / casosTotales)).ToString() + "\r\n" + "\r\n" + "El jugador obtenga más de 21 si pide una carta: " + (100 * (casoFavPerder / casosTotales)).ToString();
+        //========================================================================
+        //Probabilad Dealer
+        //========================================================================
+        Debug.Log("Dealer tenga más puntuación que el jugador " + 100*(casoFavDealer/casosTotales));
+        //========================================================================
+        //Probabilad Jugador
+        //========================================================================
+        Debug.Log("Probabilad Jugador "+ 100 * (casoFavJugador / casosTotales));
+        //========================================================================
+        //Probabilad Pasarse
+        //========================================================================
+        Debug.Log("Probabilad Pasarse  " + 100 * (casoFavPerder / casosTotales));
 
     }
 
