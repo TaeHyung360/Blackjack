@@ -243,7 +243,21 @@ public class Deck : MonoBehaviour
          * El dealer se planta al obtener 17 puntos o más
          * Mostramos el mensaje del que ha ganado
          */   
+        while(dealer.GetComponent<CardHand>().points < 17)
+        {
+            PushDealer();
+        }
+        //Le damos la vuelta a la carta el Dealer.
+        dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
 
+        if (dealer.GetComponent<CardHand>().points <= 21 && dealer.GetComponent<CardHand>().points > player.GetComponent<CardHand>().points)
+        {
+            finalMessage.text = "La partida ha finalizado, pierdes";
+        }
+        else
+        {
+            finalMessage.text = "La partida ha finalizado, has ganado";
+        }
          
     }
 
