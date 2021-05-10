@@ -65,7 +65,7 @@ public class CardHand : MonoBehaviour
         foreach (GameObject f in cards)
         {            
 
-            if (f.GetComponent<CardModel>().value != 11)
+            if (f.GetComponent<CardModel>().value != 1)
                 val += f.GetComponent<CardModel>().value;
             else
                 aces++;

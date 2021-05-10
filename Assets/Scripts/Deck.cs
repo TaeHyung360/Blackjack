@@ -88,22 +88,26 @@ public class Deck : MonoBehaviour
              * Si alguno de los dos obtiene Blackjack, termina el juego y mostramos mensaje
              */
 
-            int puntosDealer = values[2] + values[4];
+            if (dealer.GetComponent<CardHand>().points == 21)
+            {
+                //Le damos la vuelta a la carta el Dealer.
+                dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
 
-            int puntosJugador = values[0] + values[3];
+                finalMessage.text = "La partida ha finalizado, pierdeso";
+            }
+            else if (player.GetComponent<CardHand>().points == 21)
+            {
+                //Le damos la vuelta a la carta el Dealer.
+                dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
 
-            if(puntosDealer == 21){
+                finalMessage.text = "La partida ha finalizado, has ganado";
+            }
+            else if (dealer.GetComponent<CardHand>().points == player.GetComponent<CardHand>().points)
+            {
+                //Le damos la vuelta a la carta el Dealer.
+                dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
 
-                Debug.Log("Gana Dealer");
-
-            }else if(puntosJugador == 21){
-
-                Debug.Log("Gana Jugador");
-
-            }else if(puntosJugador == 21 && puntosDealer == 21){
-
-                Debug.Log("Empate");
-
+                finalMessage.text = "La partida ha finalizado, empate";
             }
         }
     }
@@ -252,13 +256,16 @@ public class Deck : MonoBehaviour
 
         if (dealer.GetComponent<CardHand>().points <= 21 && dealer.GetComponent<CardHand>().points > player.GetComponent<CardHand>().points)
         {
-            finalMessage.text = "La partida ha finalizado, pierdes";
+            finalMessage.text = "La partida ha finalizado, pierdeso";
         }
-        else
+        else if (player.GetComponent<CardHand>().points <= 21 && player.GetComponent<CardHand>().points > dealer.GetComponent<CardHand>().points)
         {
             finalMessage.text = "La partida ha finalizado, has ganado";
         }
-         
+        else if (dealer.GetComponent<CardHand>().points == 21 && player.GetComponent<CardHand>().points == 21)
+        {
+            finalMessage.text = "La partida ha finalizado, empate";
+        }
     }
 
     public void PlayAgain()
