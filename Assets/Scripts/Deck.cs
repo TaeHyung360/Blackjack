@@ -150,7 +150,7 @@ public class Deck : MonoBehaviour
 
         //Calculamos las probabilidades del resto de las cartas.
 
-        for (int i = 4; i < values.Length; i++)
+        for (int i = player.GetComponent<CardHand>().cards.Count + dealer.GetComponent<CardHand>().cards.Count + 1; i < values.Length; i++)
         {
 
             if (values[i] > cantidadSuperarDealer)
@@ -175,7 +175,7 @@ public class Deck : MonoBehaviour
             }
 
         }
-        probMessage.text = "El dealer tenga más puntuación que el jugador: " + (100 * (casoFavDealer / casosTotales)).ToString() + "\r\n" + "\r\n" + "El jugador obtenga entre un 17 y un 21 si pide una carta: " + (100 * (casoFavJugador / casosTotales)).ToString() + "\r\n" + "\r\n" + "El jugador obtenga más de 21 si pide una carta: " + (100 * (casoFavPerder / casosTotales)).ToString();
+        probMessage.text = "El dealer tenga más puntuación que el jugador: " + (100 * (casoFavDealer / casosTotales)).ToString() + "%" +"\r\n" + "\r\n" + "El jugador obtenga entre un 17 y un 21 si pide una carta: " + (100 * (casoFavJugador / casosTotales)).ToString() + "%" +"\r\n" + "\r\n" + "El jugador obtenga más de 21 si pide una carta: " + (100 * (casoFavPerder / casosTotales)).ToString() + "%";
         //========================================================================
         //Probabilad Dealer
         //========================================================================
@@ -221,7 +221,14 @@ public class Deck : MonoBehaviour
 
         /*TODO:
          * Comprobamos si el jugador ya ha perdido y mostramos mensaje
-         */      
+        */
+        if(player.GetComponent<CardHand>().points > 21)
+        {
+            //Le damos la vuelta a la carta el Dealer.
+            dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+            //Mostramos mensaje de derrota.
+            finalMessage.text = "La partida ha finalizado, pierdes";
+        }
 
     }
 
@@ -235,7 +242,8 @@ public class Deck : MonoBehaviour
          * Repartimos cartas al dealer si tiene 16 puntos o menos
          * El dealer se planta al obtener 17 puntos o más
          * Mostramos el mensaje del que ha ganado
-         */                
+         */   
+
          
     }
 
