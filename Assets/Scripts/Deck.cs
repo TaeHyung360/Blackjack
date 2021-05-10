@@ -83,9 +83,11 @@ public class Deck : MonoBehaviour
         {
             PushPlayer();
             PushDealer();
+
             /*TODO:
              * Si alguno de los dos obtiene Blackjack, termina el juego y mostramos mensaje
              */
+
             int puntosDealer = values[2] + values[4];
 
             int puntosJugador = values[0] + values[3];
@@ -114,6 +116,12 @@ public class Deck : MonoBehaviour
          * - Probabilidad de que el jugador obtenga entre un 17 y un 21 si pide una carta
          * - Probabilidad de que el jugador obtenga más de 21 si pide una carta          
          */
+        int casosTotales = 49;
+
+        int cantidadASuperarDealer = values[0] + values[2] - values[1];
+
+
+
     }
 
     void PushDealer()
