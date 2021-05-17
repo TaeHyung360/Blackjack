@@ -9,11 +9,18 @@ public class Deck : MonoBehaviour
     public Button hitButton;
     public Button stickButton;
     public Button playAgainButton;
+    public Button bancaButton;
     public Text finalMessage;
     public Text probMessage;
+    public Text bancaMessage;
+    public Text dineroApostadoMessage;
 
     public int[] values = new int[52];
-    int cardIndex = 0;    
+    int cardIndex = 0;
+
+    public int banca = 1000;
+
+    public int dineroApostado = 0;
        
     private void Awake()
     {    
@@ -79,6 +86,9 @@ public class Deck : MonoBehaviour
 
     void StartGame()
     {
+
+        apostar();
+
         for (int i = 0; i < 2; i++)
         {
             PushPlayer();
@@ -92,24 +102,40 @@ public class Deck : MonoBehaviour
             {
                 //Le damos la vuelta a la carta el Dealer.
                 dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
+                finalMessage.text = "La partida ha finalizado, pierdes";
 
-                finalMessage.text = "La partida ha finalizado, pierdeso";
+                dineroApostado = 0;
+                dineroApostadoMessage.text = dineroApostado.ToString();
+
             }
             else if (player.GetComponent<CardHand>().points == 21)
             {
                 //Le damos la vuelta a la carta el Dealer.
                 dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
-
                 finalMessage.text = "La partida ha finalizado, has ganado";
+
+                banca += dineroApostado * 2;
+                bancaMessage.text = banca.ToString();
+                dineroApostado = 0;
+                dineroApostadoMessage.text = dineroApostado.ToString();
             }
             else if (dealer.GetComponent<CardHand>().points == player.GetComponent<CardHand>().points)
             {
                 //Le damos la vuelta a la carta el Dealer.
                 dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
-
                 finalMessage.text = "La partida ha finalizado, empate";
+
+                banca += dineroApostado;
+                bancaMessage.text = banca.ToString();
+                dineroApostado = 0;
+                dineroApostadoMessage.text = dineroApostado.ToString();
             }
         }
+        //====================================================================================================
+        //Banca
+        //====================================================================================================
+        bancaMessage.text = banca.ToString();
+        dineroApostadoMessage.text = dineroApostado.ToString();
     }
 
     private void CalculateProbabilities()
@@ -179,7 +205,7 @@ public class Deck : MonoBehaviour
             }
 
         }
-        probMessage.text = "El dealer tenga más puntuación que el jugador: " + (100 * (casoFavDealer / casosTotales)).ToString() + "%" +"\r\n" + "\r\n" + "El jugador obtenga entre un 17 y un 21 si pide una carta: " + (100 * (casoFavJugador / casosTotales)).ToString() + "%" +"\r\n" + "\r\n" + "El jugador obtenga más de 21 si pide una carta: " + (100 * (casoFavPerder / casosTotales)).ToString() + "%";
+        probMessage.text = "El dealer tenga más puntuación que el jugador: " + (Mathf.Round(100 * (casoFavDealer / casosTotales))).ToString() + "%" +"\r\n" + "\r\n" + "El jugador obtenga entre un 17 y un 21 si pide una carta: " + (Mathf.Round(100 * (casoFavJugador / casosTotales))).ToString() + "%" +"\r\n" + "\r\n" + "El jugador obtenga más de 21 si pide una carta: " + (Mathf.Round(100 * (casoFavPerder / casosTotales))).ToString() + "%";
         //========================================================================
         //Probabilad Dealer
         //========================================================================
@@ -232,6 +258,9 @@ public class Deck : MonoBehaviour
             dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
             //Mostramos mensaje de derrota.
             finalMessage.text = "La partida ha finalizado, pierdes";
+
+            dineroApostado = 0;
+            dineroApostadoMessage.text = dineroApostado.ToString();
         }
 
     }
@@ -246,26 +275,53 @@ public class Deck : MonoBehaviour
          * Repartimos cartas al dealer si tiene 16 puntos o menos
          * El dealer se planta al obtener 17 puntos o más
          * Mostramos el mensaje del que ha ganado
-         */   
+         */  
+        
         while(dealer.GetComponent<CardHand>().points < 17)
         {
             PushDealer();
         }
+
         //Le damos la vuelta a la carta el Dealer.
         dealer.GetComponent<CardHand>().cards[0].GetComponent<CardModel>().ToggleFace(true);
 
         if (dealer.GetComponent<CardHand>().points <= 21 && dealer.GetComponent<CardHand>().points > player.GetComponent<CardHand>().points)
         {
-            finalMessage.text = "La partida ha finalizado, pierdeso";
+            finalMessage.text = "La partida ha finalizado, pierdes";
+
+            dineroApostado = 0;
+            dineroApostadoMessage.text = dineroApostado.ToString();
         }
-        else if (player.GetComponent<CardHand>().points <= 21 && player.GetComponent<CardHand>().points > dealer.GetComponent<CardHand>().points)
+        else if (player.GetComponent<CardHand>().points <= 21 && player.GetComponent<CardHand>().points > dealer.GetComponent<CardHand>().points || dealer.GetComponent<CardHand>().points > 21)
         {
             finalMessage.text = "La partida ha finalizado, has ganado";
+
+            banca += dineroApostado * 2;
+            bancaMessage.text = banca.ToString();
+            dineroApostado = 0;
+            dineroApostadoMessage.text = dineroApostado.ToString();
         }
         else if (dealer.GetComponent<CardHand>().points == 21 && player.GetComponent<CardHand>().points == 21)
         {
             finalMessage.text = "La partida ha finalizado, empate";
+
+            banca += dineroApostado;
+            bancaMessage.text = banca.ToString();
+            dineroApostado = 0;
+            dineroApostadoMessage.text = dineroApostado.ToString();
         }
+    }
+
+    public void apostar()
+    {
+        banca -= 10;
+
+        dineroApostado += 10;
+
+        bancaMessage.text = banca.ToString();
+
+        dineroApostadoMessage.text = dineroApostado.ToString();
+
     }
 
     public void PlayAgain()

@@ -64,7 +64,7 @@ public class CardHand : MonoBehaviour
         int aces = 0;
         foreach (GameObject f in cards)
         {            
-
+            //Antes tenia 11 y el as vale 1 o 11
             if (f.GetComponent<CardModel>().value != 1)
                 val += f.GetComponent<CardModel>().value;
             else
